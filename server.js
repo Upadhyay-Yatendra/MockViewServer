@@ -11,14 +11,15 @@ const port = 4566;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// CORS setup for frontend
-app.use(
-  cors({
-    origin: process.env.clientURL, // Frontend origin
-    methods: ["GET", "POST"], // Allowed HTTP methods
-    credentials: true, // Allow credentials (cookies, headers)
-  })
-);
+// CORS setup
+const corsOptions = {
+  origin: process.env.clientURL, // no trailing slash in .env
+  methods: ["GET", "POST"],
+  credentials: true,
+};
+
+app.use(cors(corsOptions));       // handle actual requests
+app.options("*", cors(corsOptions)); // handle preflight requests
 
 // Routes
 app.use("/interview", interviewRouter);
